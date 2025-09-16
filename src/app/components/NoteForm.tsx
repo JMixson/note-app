@@ -1,6 +1,8 @@
 "use client";
 
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useMutation } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 
 type Inputs = {
   title: string;
@@ -12,10 +14,22 @@ function NoteForm() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSumbit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const createNote = useMutation(api.notes.createNote);
+
+  const onSumbit: SubmitHandler<Inputs> = async (data) => {
+    try {
+      await createNote(data);
+      console.log("Note Created");
+
+      reset();
+    } catch (error) {
+      console.error("Error creating note:", error);
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit(onSumbit)}>
