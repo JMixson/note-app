@@ -32,7 +32,7 @@ function NoteForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSumbit)}>
+    <form onSubmit={handleSubmit(onSumbit)} className="w-full lg:w-1/3">
       <label className="mb-4 block">
         <span className="text-sm font-medium text-gray-700"> Title </span>
 
