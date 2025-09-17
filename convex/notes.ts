@@ -8,6 +8,13 @@ export const get = query({
   },
 });
 
+export const getNote = query({
+  args: { id: v.id("notes") },
+  handler: async (ctx, args) => {
+    return await ctx.db.get(args.id);
+  },
+});
+
 export const createNote = mutation({
   args: {
     title: v.string(),
