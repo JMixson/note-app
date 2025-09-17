@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ConvexClientProvider } from "@/ConvexClientProvider";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
@@ -29,9 +30,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} grid min-h-screen antialiased`}
       >
-        <Header />
-        {children}
-        <Footer />
+        <ConvexClientProvider>
+          <Header />
+          {children}
+          <Footer />
+        </ConvexClientProvider>
       </body>
     </html>
   );

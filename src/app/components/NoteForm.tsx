@@ -1,6 +1,8 @@
 "use client";
 
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useMutation } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 
 type Inputs = {
   title: string;
@@ -12,34 +14,54 @@ function NoteForm() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSumbit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const createNote = useMutation(api.notes.createNote);
+
+  const onSumbit: SubmitHandler<Inputs> = async (data) => {
+    try {
+      await createNote(data);
+      console.log("Note Created");
+
+      reset();
+    } catch (error) {
+      console.error("Error creating note:", error);
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit(onSumbit)}>
-      <label>
+      <label className="mb-4 block">
         <span className="text-sm font-medium text-gray-700"> Title </span>
 
         <input
           {...register("title", { required: true })}
           className="mt-0.5 w-full resize-none rounded border-gray-300 shadow-sm sm:text-sm"
         />
-        {errors.title && <span>This field is required</span>}
+        <div className="mt-0.5 h-2">
+          {errors.title && (
+            <span className="text-sm text-red-600">This field is required</span>
+          )}
+        </div>
       </label>
 
-      <label>
+      <label className="mb-4 block">
         <span className="text-sm font-medium text-gray-700"> Author </span>
 
         <input
           {...register("author", { required: true })}
           className="mt-0.5 w-full resize-none rounded border-gray-300 shadow-sm sm:text-sm"
         />
-        {errors.author && <span>This field is required</span>}
+        <div className="mt-0.5 h-2">
+          {errors.title && (
+            <span className="text-sm text-red-600">This field is required</span>
+          )}
+        </div>
       </label>
 
-      <label>
+      <label className="mb-4 block">
         <span className="text-sm font-medium text-gray-700"> Notes </span>
 
         <textarea
@@ -47,7 +69,11 @@ function NoteForm() {
           className="mt-0.5 w-full resize-none rounded border-gray-300 shadow-sm sm:text-sm"
           rows={4}
         ></textarea>
-        {errors.content && <span>This field is required</span>}
+        <div className="mt-0.5 h-2">
+          {errors.title && (
+            <span className="text-sm text-red-600">This field is required</span>
+          )}
+        </div>
       </label>
 
       <div className="mt-1.5 flex items-center justify-end gap-2">
