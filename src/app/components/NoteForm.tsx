@@ -34,7 +34,7 @@ function NoteForm() {
   return (
     <form onSubmit={handleSubmit(onSumbit)} className="w-full">
       <label className="mb-4 block">
-        <span className="text-sm font-medium text-gray-700"> Title </span>
+        <span className="text-sm font-bold text-gray-700"> Title </span>
 
         <input
           {...register("title", { required: true })}
@@ -48,7 +48,7 @@ function NoteForm() {
       </label>
 
       <label className="mb-4 block">
-        <span className="text-sm font-medium text-gray-700"> Author </span>
+        <span className="text-sm font-bold text-gray-700"> Author </span>
 
         <input
           {...register("author", { required: true })}
@@ -62,7 +62,7 @@ function NoteForm() {
       </label>
 
       <label className="mb-4 block">
-        <span className="text-sm font-medium text-gray-700"> Notes </span>
+        <span className="text-sm font-bold text-gray-700"> Notes </span>
 
         <textarea
           {...register("content", { required: true })}
@@ -79,14 +79,14 @@ function NoteForm() {
       <div className="mt-1.5 flex items-center justify-end gap-2">
         <button
           type="reset"
-          className="rounded border border-transparent px-3 py-1.5 text-sm font-medium text-gray-700 transition-colors hover:cursor-pointer hover:text-gray-900"
+          className="rounded border border-transparent px-3 py-1.5 text-sm font-semibold text-gray-700 transition-colors hover:cursor-pointer hover:text-gray-900"
         >
           Clear
         </button>
 
         <button
           type="submit"
-          className="rounded border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-900 shadow-sm transition-colors hover:cursor-pointer hover:bg-gray-100"
+          className="rounded border border-gray-300 px-3 py-1.5 text-sm font-bold text-gray-900 shadow-sm transition-colors hover:cursor-pointer hover:bg-gray-100"
         >
           Save Note
         </button>
