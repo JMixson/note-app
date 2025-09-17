@@ -8,8 +8,8 @@ function NoteList() {
 
   return (
     <>
-      <h2>Notes</h2>
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-4 lg:gap-8">
+      <h2 className="mt-10 mb-2 text-3xl font-bold">Notes</h2>
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
         {notes?.map(({ _id }) => (
           <NoteCard key={_id} id={_id} />
         ))}
