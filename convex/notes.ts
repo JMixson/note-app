@@ -31,3 +31,17 @@ export const createNote = mutation({
     return noteId;
   },
 });
+
+export const deleteNote = mutation({
+  args: {
+    id: v.id("notes"),
+  },
+  handler: async (ctx, args) => {
+    const note = await ctx.db.get(args.id);
+
+    if (note) {
+      await ctx.db.delete(args.id);
+    }
+    return note;
+  },
+});
