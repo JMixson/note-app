@@ -2,6 +2,7 @@ import Image from "next/image";
 import NoteForm from "./components/NoteForm";
 import NoteList from "./components/NoteList";
 import CommunityImage from "../assets/img/community-group.jpg";
+import Link from "next/link";
 
 function Home() {
   return (
@@ -30,6 +31,15 @@ function Home() {
       </div>
 
       <NoteList />
+
+      <div className="mt-6 flex justify-center">
+        <Link
+          href="/notes"
+          className="rounded border border-gray-300 px-3 py-1.5 text-sm font-bold text-gray-900 shadow-sm transition-colors hover:cursor-pointer hover:bg-gray-100"
+        >
+          View All Note
+        </Link>
+      </div>
     </>
   );
 }
