@@ -11,7 +11,7 @@ function SingleNotePage() {
   const note = useQuery(api.notes.getNote, { id });
 
   return (
-    <>
+    <div className="mx-auto w-2/3">
       <h1 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
         {note?.title}
       </h1>
@@ -22,7 +22,7 @@ function SingleNotePage() {
         {new Date(note?._creationTime || "").toLocaleDateString()}
       </p>
       <p className="font-normal text-gray-700">{note?.content}</p>
-    </>
+    </div>
   );
 }
 
