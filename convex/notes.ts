@@ -4,7 +4,7 @@ import { v } from "convex/values";
 export const get = query({
   args: {},
   handler: async (ctx) => {
-    return await ctx.db.query("notes").collect();
+    return await ctx.db.query("notes").order("desc").collect();
   },
 });
 
@@ -29,5 +29,19 @@ export const createNote = mutation({
       updatedTime: Date.now(),
     });
     return noteId;
+  },
+});
+
+export const deleteNote = mutation({
+  args: {
+    id: v.id("notes"),
+  },
+  handler: async (ctx, args) => {
+    const note = await ctx.db.get(args.id);
+
+    if (note) {
+      await ctx.db.delete(args.id);
+    }
+    return note;
   },
 });

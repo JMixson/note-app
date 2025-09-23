@@ -32,7 +32,9 @@ export default function RootLayout({
       >
         <ConvexClientProvider>
           <Header />
-          {children}
+          <div className="mx-auto my-10 max-w-screen-xl px-4 sm:px-6 lg:px-8">
+            <main>{children}</main>
+          </div>
           <Footer />
         </ConvexClientProvider>
       </body>
