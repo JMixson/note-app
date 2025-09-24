@@ -1,7 +1,18 @@
+"use client";
+
 import Link from "next/link";
-import NoteList from "../components/NoteList";
+import { usePaginatedQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
+import NoteCard from "../components/NoteCard";
 
 function NotesPage() {
+  const loadAmount = 8;
+  const { results, status, loadMore } = usePaginatedQuery(
+    api.notes.paginateNotes,
+    {},
+    { initialNumItems: loadAmount },
+  );
+
   return (
     <>
       <nav aria-label="Breadcrumb">
@@ -55,7 +66,18 @@ function NotesPage() {
         </ol>
       </nav>
 
-      <NoteList />
+      <div className="my-6 grid grid-cols-1 gap-4 lg:grid-cols-4">
+        {results?.map(({ _id }) => (
+          <NoteCard key={_id} id={_id} />
+        ))}
+      </div>
+      <button
+        onClick={() => loadMore(loadAmount)}
+        disabled={status !== "CanLoadMore"}
+        className="rounded border border-gray-300 px-3 py-1.5 text-sm font-bold text-gray-900 shadow-sm transition-colors hover:cursor-pointer hover:bg-gray-100 disabled:bg-gray-200"
+      >
+        Load More
+      </button>
     </>
   );
 }

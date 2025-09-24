@@ -3,8 +3,8 @@ import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import NoteCard from "./NoteCard";
 
-function NoteList() {
-  const notes = useQuery(api.notes.get);
+function NoteList({ limit }: { limit?: number }) {
+  const notes = useQuery(api.notes.get, { limit });
 
   return (
     <>

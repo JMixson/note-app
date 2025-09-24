@@ -1,10 +1,14 @@
+import { paginationOptsValidator } from "convex/server";
 import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 
 export const get = query({
-  args: {},
-  handler: async (ctx) => {
-    return await ctx.db.query("notes").order("desc").collect();
+  args: { limit: v.optional(v.number()) },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("notes")
+      .order("desc")
+      .take(args.limit || 50);
   },
 });
 
@@ -43,5 +47,18 @@ export const deleteNote = mutation({
       await ctx.db.delete(args.id);
     }
     return note;
+  },
+});
+
+export const paginateNotes = query({
+  args: {
+    paginationOpts: paginationOptsValidator,
+  },
+  handler: async (ctx, args) => {
+    const notes = await ctx.db
+      .query("notes")
+      .order("desc")
+      .paginate(args.paginationOpts);
+    return notes;
   },
 });
