@@ -1,3 +1,4 @@
+import { paginationOptsValidator } from "convex/server";
 import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 
@@ -43,5 +44,18 @@ export const deleteNote = mutation({
       await ctx.db.delete(args.id);
     }
     return note;
+  },
+});
+
+export const paginateNotes = query({
+  args: {
+    paginationOpts: paginationOptsValidator,
+  },
+  handler: async (ctx, args) => {
+    const notes = await ctx.db
+      .query("notes")
+      .order("desc")
+      .paginate(args.paginationOpts);
+    return notes;
   },
 });
