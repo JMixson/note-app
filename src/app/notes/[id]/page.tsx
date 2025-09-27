@@ -1,11 +1,12 @@
 "use client";
 
-import { useParams, redirect } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";
 
 function SingleNotePage() {
+  const router = useRouter();
   const params = useParams();
   const id = params.id as Id<"notes">;
   const note = useQuery(api.notes.getNote, { id });
@@ -16,7 +17,7 @@ function SingleNotePage() {
 
     if (confirmation) {
       await deleteNote({ id });
-      redirect("/");
+      router.back();
     }
   }
 
