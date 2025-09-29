@@ -3,12 +3,7 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
-
-type Inputs = {
-  title: string;
-  author: string;
-  content: string;
-};
+import { type Inputs } from "@/types";
 
 function NoteForm() {
   const {
