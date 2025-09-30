@@ -2,16 +2,6 @@ import { paginationOptsValidator } from "convex/server";
 import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 
-export const get = query({
-  args: { limit: v.optional(v.number()) },
-  handler: async (ctx, args) => {
-    return await ctx.db
-      .query("notes")
-      .order("desc")
-      .take(args.limit || 50);
-  },
-});
-
 export const getPublicNotes = query({
   args: { limit: v.optional(v.number()) },
   handler: async (ctx, args) => {
