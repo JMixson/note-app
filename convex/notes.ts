@@ -62,3 +62,26 @@ export const paginateNotes = query({
     return notes;
   },
 });
+
+export const editNote = mutation({
+  args: {
+    id: v.id("notes"),
+    update: v.object({
+      title: v.optional(v.string()),
+      author: v.optional(v.string()),
+      content: v.optional(v.string()),
+    }),
+  },
+  handler: async (ctx, args) => {
+    const note = await ctx.db.get(args.id);
+
+    if (!note) {
+      throw new Error("Note does not exist");
+    }
+
+    const updatedTime = Date.now();
+    await ctx.db.patch(args.id, { ...args.update, updatedTime });
+
+    return { ...note, ...args.update, updatedTime };
+  },
+});

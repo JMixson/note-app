@@ -11,6 +11,8 @@ function SingleNotePage() {
   const id = params.id as Id<"notes">;
   const note = useQuery(api.notes.getNote, { id });
   const deleteNote = useMutation(api.notes.deleteNote);
+  let publishdDate = new Date(note?._creationTime || "").toLocaleDateString();
+  let editedDate = new Date(note?.updatedTime || "").toLocaleDateString();
 
   async function handleDelete() {
     const confirmation = confirm("Note will be deleted. Are you sure?");
@@ -29,13 +31,22 @@ function SingleNotePage() {
       <h2 className="mb-2 font-bold tracking-tight text-gray-900">
         By: {note?.author}
       </h2>
-      <p className="mt-1 font-normal text-gray-700">
-        {new Date(note?._creationTime || "").toLocaleDateString()}
-      </p>
+      <p className="mt-1 font-normal text-gray-700">{publishdDate}</p>
       <p className="font-normal text-gray-700">{note?.content}</p>
 
+      {editedDate !== publishdDate ? (
+        <p className="mt-2 font-normal text-gray-700">
+          <em>Edited: {editedDate}</em>
+        </p>
+      ) : (
+        ""
+      )}
+
       <div className="mt-6 inline-flex">
-        <button className="cursor-pointer rounded-l-sm border border-gray-200 px-3 py-2 font-medium text-gray-700 transition-colors hover:bg-blue-100 hover:text-gray-900 focus:z-10 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white focus:outline-none disabled:pointer-events-auto disabled:opacity-50">
+        <button
+          onClick={() => router.push(`/notes/${id}/edit`)}
+          className="cursor-pointer rounded-l-sm border border-gray-200 px-3 py-2 font-medium text-gray-700 transition-colors hover:bg-blue-100 hover:text-gray-900 focus:z-10 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white focus:outline-none disabled:pointer-events-auto disabled:opacity-50"
+        >
           Edit
         </button>
 

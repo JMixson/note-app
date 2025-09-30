@@ -1,33 +1,45 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+import { Id } from "../../../convex/_generated/dataModel";
 import { type Inputs } from "@/types";
 
-function NoteForm() {
+function EditNoteForm({ id }: { id: Id<"notes"> }) {
+  const router = useRouter();
+  const note = useQuery(api.notes.getNote, { id });
+
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<Inputs>({
+    defaultValues: {
+      title: note?.title,
+      author: note?.author,
+      content: note?.content,
+    },
+  });
 
-  const createNote = useMutation(api.notes.createNote);
+  const editNote = useMutation(api.notes.editNote);
 
-  const onSumbit: SubmitHandler<Inputs> = async (data) => {
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
-      await createNote(data);
-      console.log("Note Created");
+      await editNote({ id, update: data });
+      console.log("Note edited");
 
       reset();
+      router.push(`/notes/${id}`);
     } catch (error) {
-      console.error("Error creating note:", error);
+      console.error("Error editing note:", error);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSumbit)} className="w-full">
+    <form key={note?._id} onSubmit={handleSubmit(onSubmit)} className="w-96">
       <label className="mb-4 block">
         <span className="text-sm font-bold text-gray-700"> Title </span>
 
@@ -47,7 +59,8 @@ function NoteForm() {
 
         <input
           {...register("author", { required: true })}
-          className="mt-0.5 w-full resize-none rounded border-gray-300 shadow-sm sm:text-sm"
+          className="mt-0.5 w-full resize-none rounded border-gray-300 shadow-sm disabled:cursor-not-allowed disabled:bg-gray-200 sm:text-sm"
+          disabled
         />
         <div className="mt-0.5 h-2">
           {errors.title && (
@@ -83,11 +96,11 @@ function NoteForm() {
           type="submit"
           className="rounded border border-gray-300 px-3 py-1.5 text-sm font-bold text-gray-900 shadow-sm transition-colors hover:cursor-pointer hover:bg-gray-100"
         >
-          Save Note
+          Edit Note
         </button>
       </div>
     </form>
   );
 }
 
-export default NoteForm;
+export default EditNoteForm;
