@@ -43,20 +43,6 @@ function NoteForm() {
       </label>
 
       <label className="mb-4 block">
-        <span className="text-sm font-bold text-gray-700"> Author </span>
-
-        <input
-          {...register("author", { required: true })}
-          className="mt-0.5 w-full resize-none rounded border-gray-300 shadow-sm sm:text-sm"
-        />
-        <div className="mt-0.5 h-2">
-          {errors.title && (
-            <span className="text-sm text-red-600">This field is required</span>
-          )}
-        </div>
-      </label>
-
-      <label className="mb-4 block">
         <span className="text-sm font-bold text-gray-700"> Notes </span>
 
         <textarea

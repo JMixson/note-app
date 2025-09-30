@@ -19,7 +19,6 @@ function EditNoteForm({ id }: { id: Id<"notes"> }) {
   } = useForm<Inputs>({
     defaultValues: {
       title: note?.title,
-      author: note?.author,
       content: note?.content,
     },
   });
@@ -46,21 +45,6 @@ function EditNoteForm({ id }: { id: Id<"notes"> }) {
         <input
           {...register("title", { required: true })}
           className="mt-0.5 w-full resize-none rounded border-gray-300 shadow-sm sm:text-sm"
-        />
-        <div className="mt-0.5 h-2">
-          {errors.title && (
-            <span className="text-sm text-red-600">This field is required</span>
-          )}
-        </div>
-      </label>
-
-      <label className="mb-4 block">
-        <span className="text-sm font-bold text-gray-700"> Author </span>
-
-        <input
-          {...register("author", { required: true })}
-          className="mt-0.5 w-full resize-none rounded border-gray-300 shadow-sm disabled:cursor-not-allowed disabled:bg-gray-200 sm:text-sm"
-          disabled
         />
         <div className="mt-0.5 h-2">
           {errors.title && (
