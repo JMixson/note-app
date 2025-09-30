@@ -8,7 +8,7 @@ import NoteCard from "../components/NoteCard";
 function NotesPage() {
   const loadAmount = 8;
   const { results, status, loadMore } = usePaginatedQuery(
-    api.notes.paginateNotes,
+    api.notes.paginatePublicNotes,
     {},
     { initialNumItems: loadAmount },
   );

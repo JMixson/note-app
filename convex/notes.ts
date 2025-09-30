@@ -12,6 +12,17 @@ export const get = query({
   },
 });
 
+export const getPublicNotes = query({
+  args: { limit: v.optional(v.number()) },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("notes")
+      .withIndex("by_isPrivate", (q) => q.eq("isPrivate", false))
+      .order("desc")
+      .take(args.limit || 50);
+  },
+});
+
 export const getNote = query({
   args: { id: v.id("notes") },
   handler: async (ctx, args) => {
@@ -57,6 +68,20 @@ export const paginateNotes = query({
   handler: async (ctx, args) => {
     const notes = await ctx.db
       .query("notes")
+      .order("desc")
+      .paginate(args.paginationOpts);
+    return notes;
+  },
+});
+
+export const paginatePublicNotes = query({
+  args: {
+    paginationOpts: paginationOptsValidator,
+  },
+  handler: async (ctx, args) => {
+    const notes = await ctx.db
+      .query("notes")
+      .withIndex("by_isPrivate", (q) => q.eq("isPrivate", false))
       .order("desc")
       .paginate(args.paginationOpts);
     return notes;
