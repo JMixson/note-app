@@ -23,16 +23,35 @@ export const getNote = query({
 export const createNote = mutation({
   args: {
     title: v.string(),
-    author: v.string(),
     content: v.string(),
+    isPrivate: v.boolean(),
   },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error("You must be logged in to create a note.");
+    }
+
+    const userId = identity.subject;
+
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_userId", (q) => q.eq("userId", userId))
+      .unique();
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
     const noteId = await ctx.db.insert("notes", {
       title: args.title,
-      author: args.author,
       content: args.content,
+      isPrivate: args.isPrivate,
       updatedTime: Date.now(),
+      userId: user._id,
     });
+
     return noteId;
   },
 });
