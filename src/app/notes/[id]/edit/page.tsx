@@ -8,8 +8,7 @@ function EditNote() {
   const params = useParams();
   const id = params.id as Id<"notes">;
 
-  // return <EditNoteForm id={id} />;
-  return <>Hello</>;
+  return <EditNoteForm id={id} />;
 }
 
 export default EditNote;
