@@ -29,7 +29,7 @@ function SingleNotePage() {
         {note?.title}
       </h1>
       <h2 className="mb-2 font-bold tracking-tight text-gray-900">
-        By: {note?.author}
+        By: Unknown
       </h2>
       <p className="mt-1 font-normal text-gray-700">{publishdDate}</p>
       <p className="font-normal text-gray-700">{note?.content}</p>
