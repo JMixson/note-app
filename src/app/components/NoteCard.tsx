@@ -17,7 +17,7 @@ function NoteCard({ id }: { id: Id<"notes"> }) {
         {note?.title}
       </h3>
       <h4 className="mb-2 font-bold tracking-tight text-gray-900">
-        By: {note?.author}
+        By: Unknown
       </h4>
       <p className="font-normal text-gray-700">{note?.content}</p>
       <p className="mt-1 font-normal text-gray-700">
