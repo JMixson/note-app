@@ -9,7 +9,7 @@ import { type Inputs } from "@/types";
 
 function EditNoteForm({ id }: { id: Id<"notes"> }) {
   const router = useRouter();
-  const note = useQuery(api.notes.getNote, { id });
+  const note = useQuery(api.notes.getPublicNoteById, { id });
 
   const {
     register,

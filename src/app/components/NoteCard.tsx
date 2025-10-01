@@ -6,7 +6,7 @@ import { api } from "../../../convex/_generated/api";
 import { Id } from "../../../convex/_generated/dataModel";
 
 function NoteCard({ id }: { id: Id<"notes"> }) {
-  const note = useQuery(api.notes.getNote, { id });
+  const note = useQuery(api.notes.getPublicNoteById, { id });
 
   return (
     <Link

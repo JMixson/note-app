@@ -9,7 +9,7 @@ function SingleNotePage() {
   const router = useRouter();
   const params = useParams();
   const id = params.id as Id<"notes">;
-  const note = useQuery(api.notes.getNote, { id });
+  const note = useQuery(api.notes.getPublicNoteById, { id });
   const deleteNote = useMutation(api.notes.deleteNote);
   let publishdDate = new Date(note?._creationTime || "").toLocaleDateString();
   let editedDate = new Date(note?.updatedTime || "").toLocaleDateString();

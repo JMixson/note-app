@@ -14,13 +14,6 @@ export const getPublicNotes = query({
   },
 });
 
-export const getNote = query({
-  args: { id: v.id("notes") },
-  handler: async (ctx, args) => {
-    return await ctx.db.get(args.id);
-  },
-});
-
 export const getPublicNoteById = query({
   args: { id: v.id("notes") },
   handler: async (ctx, args) => {
