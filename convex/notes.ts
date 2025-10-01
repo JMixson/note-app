@@ -1,6 +1,7 @@
 import { paginationOptsValidator } from "convex/server";
 import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
+import { ERROR_MESSAGES } from "@/lib/error-messages";
 
 export const getPublicNotes = query({
   args: { limit: v.optional(v.number()) },
@@ -33,7 +34,7 @@ export const getUserNoteById = query({
     const identity = await ctx.auth.getUserIdentity();
 
     if (!identity) {
-      throw new Error("Not authenticated.");
+      throw new Error(ERROR_MESSAGES.UNAUTHORIZED);
     }
 
     const userId = identity.subject;
@@ -44,17 +45,17 @@ export const getUserNoteById = query({
       .unique();
 
     if (!user) {
-      throw new Error("User not found");
+      throw new Error(ERROR_MESSAGES.USER_NOT_FOUND);
     }
 
     const note = await ctx.db.get(args.id);
 
     if (!note) {
-      throw new Error("Note not found.");
+      throw new Error(ERROR_MESSAGES.NOTE_NOT_FOUND);
     }
 
     if (note.userId !== userId) {
-      throw new Error("Not authorized to view this note");
+      throw new Error(ERROR_MESSAGES.UNAUTHORIZED);
     }
 
     return note;
@@ -71,7 +72,7 @@ export const createNote = mutation({
     const identity = await ctx.auth.getUserIdentity();
 
     if (!identity) {
-      throw new Error("You must be logged in to create a note.");
+      throw new Error(ERROR_MESSAGES.UNAUTHORIZED);
     }
 
     const userId = identity.subject;
@@ -82,7 +83,7 @@ export const createNote = mutation({
       .unique();
 
     if (!user) {
-      throw new Error("User not found");
+      throw new Error(ERROR_MESSAGES.USER_NOT_FOUND);
     }
 
     const noteId = await ctx.db.insert("notes", {
@@ -151,7 +152,7 @@ export const editNote = mutation({
     const note = await ctx.db.get(args.id);
 
     if (!note) {
-      throw new Error("Note does not exist");
+      throw new Error(ERROR_MESSAGES.NOTE_NOT_FOUND);
     }
 
     const updatedTime = Date.now();

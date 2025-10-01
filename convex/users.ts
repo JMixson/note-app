@@ -1,6 +1,7 @@
 import { mutation } from "./_generated/server";
 import { v } from "convex/values";
 import { createAuth, authComponent } from "./auth";
+import { ERROR_MESSAGES } from "@/lib/error-messages";
 
 export const ensureUser = mutation({
   args: {
@@ -9,7 +10,7 @@ export const ensureUser = mutation({
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) {
-      throw new Error("Not authenticated");
+      throw new Error(ERROR_MESSAGES.UNAUTHORIZED);
     }
 
     const existingUser = await ctx.db
