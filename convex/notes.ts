@@ -57,7 +57,7 @@ export const getUserNoteById = query({
     }
 
     if (note.userId !== userId) {
-      throw new Error(ERROR_MESSAGES.UNAUTHORIZED);
+      throw new Error(ERROR_MESSAGES.NOT_OWNER);
     }
 
     return note;
@@ -129,7 +129,7 @@ export const deleteNote = mutation({
     }
 
     if (note.userId !== userId) {
-      throw new Error(ERROR_MESSAGES.UNAUTHORIZED);
+      throw new Error(ERROR_MESSAGES.NOT_OWNER);
     }
 
     await ctx.db.delete(args.id);
@@ -198,7 +198,7 @@ export const editNote = mutation({
     }
 
     if (note.userId !== userId) {
-      throw new Error(ERROR_MESSAGES.UNAUTHORIZED);
+      throw new Error(ERROR_MESSAGES.NOT_OWNER);
     }
 
     const updatedTime = Date.now();
