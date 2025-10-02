@@ -182,15 +182,6 @@ export const editNote = mutation({
 
     const userId = identity.subject;
 
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_userId", (q) => q.eq("userId", userId))
-      .unique();
-
-    if (!user) {
-      throw new Error(ERROR_MESSAGES.USER_NOT_FOUND);
-    }
-
     const note = await ctx.db.get(args.id);
 
     if (!note) {
@@ -201,9 +192,9 @@ export const editNote = mutation({
       throw new Error(ERROR_MESSAGES.NOT_OWNER);
     }
 
-    const updatedTime = Date.now();
-    await ctx.db.patch(args.id, { ...args.update, updatedTime });
-
-    return { ...note, ...args.update, updatedTime };
+    if (Object.keys(args.update).length > 0) {
+      const updatedTime = Date.now();
+      await ctx.db.patch(args.id, { ...args.update, updatedTime });
+    }
   },
 });
