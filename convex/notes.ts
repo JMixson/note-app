@@ -2,6 +2,7 @@ import { paginationOptsValidator } from "convex/server";
 import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 import { ERROR_MESSAGES } from "@/lib/error-messages";
+import { Id } from "./_generated/dataModel";
 
 export const getPublicNotes = query({
   args: { limit: v.optional(v.number()) },
@@ -119,19 +120,6 @@ export const deleteNote = mutation({
   },
 });
 
-export const paginateNotes = query({
-  args: {
-    paginationOpts: paginationOptsValidator,
-  },
-  handler: async (ctx, args) => {
-    const notes = await ctx.db
-      .query("notes")
-      .order("desc")
-      .paginate(args.paginationOpts);
-    return notes;
-  },
-});
-
 export const paginatePublicNotes = query({
   args: {
     paginationOpts: paginationOptsValidator,
@@ -142,6 +130,29 @@ export const paginatePublicNotes = query({
       .withIndex("by_isPrivate", (q) => q.eq("isPrivate", false))
       .order("desc")
       .paginate(args.paginationOpts);
+    return notes;
+  },
+});
+
+export const paginateUserNotes = query({
+  args: {
+    paginationOpts: paginationOptsValidator,
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error(ERROR_MESSAGES.UNAUTHORIZED);
+    }
+
+    const userId = identity.subject as Id<"users">;
+
+    const notes = await ctx.db
+      .query("notes")
+      .withIndex("by_userId", (q) => q.eq("userId", userId))
+      .order("desc")
+      .paginate(args.paginationOpts);
+
     return notes;
   },
 });
