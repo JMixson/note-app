@@ -105,11 +105,34 @@ export const deleteNote = mutation({
     id: v.id("notes"),
   },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error(ERROR_MESSAGES.UNAUTHORIZED);
+    }
+
+    const userId = identity.subject;
+
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_userId", (q) => q.eq("userId", userId))
+      .unique();
+
+    if (!user) {
+      throw new Error(ERROR_MESSAGES.USER_NOT_FOUND);
+    }
+
     const note = await ctx.db.get(args.id);
 
-    if (note) {
-      await ctx.db.delete(args.id);
+    if (!note) {
+      throw new Error(ERROR_MESSAGES.NOTE_NOT_FOUND);
     }
+
+    if (note.userId !== userId) {
+      throw new Error(ERROR_MESSAGES.UNAUTHORIZED);
+    }
+
+    await ctx.db.delete(args.id);
     return note;
   },
 });
@@ -146,15 +169,36 @@ export const editNote = mutation({
     id: v.id("notes"),
     update: v.object({
       title: v.optional(v.string()),
-      author: v.optional(v.string()),
       content: v.optional(v.string()),
+      isPrivate: v.optional(v.boolean()),
     }),
   },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error(ERROR_MESSAGES.UNAUTHORIZED);
+    }
+
+    const userId = identity.subject;
+
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_userId", (q) => q.eq("userId", userId))
+      .unique();
+
+    if (!user) {
+      throw new Error(ERROR_MESSAGES.USER_NOT_FOUND);
+    }
+
     const note = await ctx.db.get(args.id);
 
     if (!note) {
       throw new Error(ERROR_MESSAGES.NOTE_NOT_FOUND);
+    }
+
+    if (note.userId !== userId) {
+      throw new Error(ERROR_MESSAGES.UNAUTHORIZED);
     }
 
     const updatedTime = Date.now();
