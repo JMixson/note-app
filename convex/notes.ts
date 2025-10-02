@@ -69,23 +69,14 @@ export const createNote = mutation({
       throw new Error(ERROR_MESSAGES.UNAUTHORIZED);
     }
 
-    const userId = identity.subject;
-
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_userId", (q) => q.eq("userId", userId))
-      .unique();
-
-    if (!user) {
-      throw new Error(ERROR_MESSAGES.USER_NOT_FOUND);
-    }
+    const userId = identity.subject as Id<"users">;
 
     const noteId = await ctx.db.insert("notes", {
       title: args.title,
       content: args.content,
       isPrivate: args.isPrivate,
       updatedTime: Date.now(),
-      userId: user._id,
+      userId: userId,
     });
 
     return noteId;
