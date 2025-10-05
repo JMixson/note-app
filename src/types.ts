@@ -3,3 +3,9 @@ export type Inputs = {
   content: string;
   isPrivate: boolean;
 };
+
+export type SignInInputs = {
+  displayName: string;
+  email: string;
+  password: string;
+};
