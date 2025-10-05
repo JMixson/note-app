@@ -11,7 +11,13 @@ function NoteForm() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<Inputs>({
+    defaultValues: {
+      title: "",
+      isPrivate: true,
+      content: "",
+    },
+  });
 
   const createNote = useMutation(api.notes.createNote);
 
@@ -43,17 +49,16 @@ function NoteForm() {
       </label>
 
       <label className="mb-4 block">
-        <span className="text-sm font-bold text-gray-700">Note Visibility</span>
-
-        <select
+        <input
+          type="checkbox"
           {...register("isPrivate", { required: true })}
-          className="mt-0.5 w-full rounded border-gray-300 shadow-sm sm:text-sm"
-        >
-          <option value="Private">Private</option>
-          <option value="Public">Public</option>
-        </select>
+          className="mr-2 size-5 rounded border-gray-300 accent-teal-600 shadow-sm"
+        />
+
+        <span className="text-sm font-bold text-gray-700">Private Note</span>
+
         <div className="mt-0.5 h-2">
-          {errors.title && (
+          {errors.isPrivate && (
             <span className="text-sm text-red-600">This field is required</span>
           )}
         </div>
@@ -68,7 +73,7 @@ function NoteForm() {
           rows={4}
         ></textarea>
         <div className="mt-0.5 h-2">
-          {errors.title && (
+          {errors.content && (
             <span className="text-sm text-red-600">This field is required</span>
           )}
         </div>
