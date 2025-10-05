@@ -3,7 +3,7 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
-import { type Inputs } from "@/types";
+import { type NoteInputs } from "@/types";
 
 function NoteForm() {
   const {
@@ -11,7 +11,7 @@ function NoteForm() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<Inputs>({
+  } = useForm<NoteInputs>({
     defaultValues: {
       title: "",
       isPrivate: true,
@@ -21,7 +21,7 @@ function NoteForm() {
 
   const createNote = useMutation(api.notes.createNote);
 
-  const onSumbit: SubmitHandler<Inputs> = async (data) => {
+  const onSumbit: SubmitHandler<NoteInputs> = async (data) => {
     try {
       await createNote(data);
       console.log("Note Created");

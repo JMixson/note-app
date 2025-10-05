@@ -1,4 +1,4 @@
-export type Inputs = {
+export type NoteInputs = {
   title: string;
   content: string;
   isPrivate: boolean;

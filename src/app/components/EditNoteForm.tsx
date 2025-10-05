@@ -5,7 +5,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { Id } from "../../../convex/_generated/dataModel";
-import { type Inputs } from "@/types";
+import { type NoteInputs } from "@/types";
 
 function EditNoteForm({ id }: { id: Id<"notes"> }) {
   const router = useRouter();
@@ -16,7 +16,7 @@ function EditNoteForm({ id }: { id: Id<"notes"> }) {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<Inputs>({
+  } = useForm<NoteInputs>({
     defaultValues: {
       title: note?.title,
       isPrivate: true,
@@ -26,7 +26,7 @@ function EditNoteForm({ id }: { id: Id<"notes"> }) {
 
   const editNote = useMutation(api.notes.editNote);
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  const onSubmit: SubmitHandler<NoteInputs> = async (data) => {
     try {
       await editNote({ id, update: data });
       console.log("Note edited");
