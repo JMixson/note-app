@@ -4,7 +4,7 @@ import { api } from "../../../convex/_generated/api";
 import NoteCard from "./NoteCard";
 
 function NoteList({ limit }: { limit?: number }) {
-  const notes = useQuery(api.notes.get, { limit });
+  const notes = useQuery(api.notes.getPublicNotes, { limit });
 
   return (
     <>

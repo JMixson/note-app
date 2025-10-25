@@ -5,28 +5,28 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { Id } from "../../../convex/_generated/dataModel";
-import { type Inputs } from "@/types";
+import { type NoteInputs } from "@/types";
 
 function EditNoteForm({ id }: { id: Id<"notes"> }) {
   const router = useRouter();
-  const note = useQuery(api.notes.getNote, { id });
+  const note = useQuery(api.notes.getPublicNoteById, { id });
 
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<Inputs>({
+  } = useForm<NoteInputs>({
     defaultValues: {
       title: note?.title,
-      author: note?.author,
+      isPrivate: true,
       content: note?.content,
     },
   });
 
   const editNote = useMutation(api.notes.editNote);
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  const onSubmit: SubmitHandler<NoteInputs> = async (data) => {
     try {
       await editNote({ id, update: data });
       console.log("Note edited");
@@ -55,15 +55,16 @@ function EditNoteForm({ id }: { id: Id<"notes"> }) {
       </label>
 
       <label className="mb-4 block">
-        <span className="text-sm font-bold text-gray-700"> Author </span>
-
         <input
-          {...register("author", { required: true })}
-          className="mt-0.5 w-full resize-none rounded border-gray-300 shadow-sm disabled:cursor-not-allowed disabled:bg-gray-200 sm:text-sm"
-          disabled
+          type="checkbox"
+          {...register("isPrivate", { required: true })}
+          className="mr-2 size-5 rounded border-gray-300 accent-teal-600 shadow-sm"
         />
+
+        <span className="text-sm font-bold text-gray-700">Private Note</span>
+
         <div className="mt-0.5 h-2">
-          {errors.title && (
+          {errors.isPrivate && (
             <span className="text-sm text-red-600">This field is required</span>
           )}
         </div>
@@ -78,7 +79,7 @@ function EditNoteForm({ id }: { id: Id<"notes"> }) {
           rows={4}
         ></textarea>
         <div className="mt-0.5 h-2">
-          {errors.title && (
+          {errors.content && (
             <span className="text-sm text-red-600">This field is required</span>
           )}
         </div>
